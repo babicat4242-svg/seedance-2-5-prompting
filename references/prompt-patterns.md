@@ -7,6 +7,7 @@ Copy these structures, replace every brace-delimited variable, and retain the ex
 - Shared prompt order
 - Community-derived compacting checks
 - Seedance 2.0 Fast custom profile
+- Revision recompilation pattern
 - Short single-shot pattern
 - 30-second sequence pattern
 - Image-to-video pattern
@@ -47,11 +48,25 @@ Keep the same shared prompt order and full control structure as Seedance 2.5: mo
 
 Aim for about 3,500 characters and never exceed 4,000. Count with `../scripts/count_prompt_chars.py PROMPT_PATH --limit 4000`. Tighten repeated prose before removing detail, and never remove the asset-role hierarchy, subject/camera separation, camera start/path/end, audio mode, or final frame merely to reach the smaller budget.
 
+## Revision recompilation pattern
+
+Use this as an internal compiler whenever the user changes an existing prompt. Do not copy this ledger into the final prompt.
+
+```text
+Revision operation: classify each change as ADD, REPLACE, DELETE, REORDER, RETIME, PRESERVE, or RESET.
+Retired values: list displaced values and the camera, timing, focus, audio, prop, lighting, continuity, or final-frame clauses that depend on them; remove all of them.
+Canonical active brief: rebuild profile/mode/output, reference roles, non-negotiables, scene geometry, subject beats, camera beats, lighting/style, audio, final frame, and continuity locks from active values only.
+Dependency rebuild: align every changed action with its camera start/move/path/speed/blocking/focus/end and timed audio cues; replace the old range set after REORDER or RETIME.
+Final validation: no retired value, no conflicting move, complete duration coverage, physically contiguous one-shot path when requested, exact active tags, and active character budget satisfied.
+```
+
+Return one complete replacement prompt in the normal shared order. Never return a patch fragment for the user to append. Read [revision-workflow.md](revision-workflow.md) for precedence, dependency cleanup, and worked cases.
+
 ## Character budget and language fallback
 
 Select the active budget before writing: Seedance 2.5 targets 4,300–4,800 characters with a 5,000-character hard maximum; explicit Seedance 2.0 Fast aims for about 3,500 with a 4,000-character hard maximum. Count all Unicode characters in the prompt code block, including spaces and logical line breaks. Use `../scripts/count_prompt_chars.py` for 2.5 and add `--limit 4000` for Fast. Never pad a complete short prompt.
 
-For Fast drafts between 3,501 and 4,000 characters, compress redundant wording in the requested language toward 3,500 while keeping the complete 2.5 structure. If a draft exceeds its active hard maximum, rewrite the entire code block in concise Simplified Chinese while preserving exact reference tags, timecodes, asset-role priority, camera geometry, final frame, and functional constraints. Preserve the exact set of supplied timecode ranges; do not merge, renumber, or recalculate beats. Count again and compress until the active limit is met. When the user explicitly forbids translation, compress in the requested language instead. Keep the asset-role table, camera rationale, and length report outside the prompt code block.
+For Fast drafts between 3,501 and 4,000 characters, compress redundant wording in the requested language toward 3,500 while keeping the complete 2.5 structure. Before counting any revision, discard retired values and compile only the canonical active brief. If that draft exceeds its active hard maximum, rewrite the entire code block in concise Simplified Chinese while preserving exact active reference tags, timecodes, asset-role priority, camera geometry, final frame, and functional constraints. Preserve the exact active timecode set; when the newest instruction explicitly reorders or retimes beats, the new set replaces the old set. Count again and compress until the active limit is met. When the user explicitly forbids translation, compress in the requested language instead. Keep the asset-role table, camera rationale, and length report outside the prompt code block.
 ## Short single-shot pattern
 
 Use for one self-contained action in `{DURATION}` (typically a short standard generation).
@@ -130,7 +145,7 @@ Load [camera-motion.md](camera-motion.md) whenever the white-model path includes
 
 ## Localized edit pattern
 
-Use for one named change while retaining everything outside that region and variable.
+Use for one named change while retaining everything outside that region and variable. If the user replaces camera, timing, audio, or another global layer, use the revision recompilation pattern instead of locking the replaced source behavior.
 
 ```text
 Mode/output: Localized edit of {SOURCE_CLIP_TAG}, region {EDIT_REGION}, changing only {EDIT_VARIABLE}.

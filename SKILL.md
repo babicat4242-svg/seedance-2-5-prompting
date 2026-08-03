@@ -18,6 +18,7 @@ Use this skill for Seedance 2.5, the latest/current Seedance, an unspecified See
 - Read [references/model-differences.md](references/model-differences.md) for feature, limit, beta, 2.0-versus-2.5, or UI questions.
 - Read [references/camera-motion.md](references/camera-motion.md) for any non-static camera, camera repair, R2V path, or camera vocabulary request.
 - Read [references/prompt-patterns.md](references/prompt-patterns.md) for generation, rewrite, mode selection, local edit, extension, or full prompt output.
+- Read [references/revision-workflow.md](references/revision-workflow.md) whenever the user revises, replaces, deletes, reorders, retimes, or repeatedly repairs an existing prompt.
 - Read [references/sources.md](references/sources.md) when a claim needs verification or official attribution.
 - Read [references/community-api-prompts-analysis.md](references/community-api-prompts-analysis.md) when adapting examples or claims from awesome-seedance-2.5-api-prompts, another community prompt library, or a third-party API guide.
 
@@ -61,11 +62,19 @@ Mark beta, rollout-, account-, region-, or UI-dependent capabilities as qualifie
 
 Choose one deliberate mode: clean visual, diegetic sound, scored soundtrack, or source-audio transfer. State silence, dialogue, music, effects, and sync points so they do not conflict. Treat source-audio transfer as Beta/UI-dependent unless the current UI accepts and tags the asset.
 
+## Multi-turn revision compiler
+
+Whenever the user revises an existing prompt, treat the previous prompt as evidence of the current brief, not as prose to patch. First build a canonical active brief containing only the latest active profile, asset roles, constraints, subject beats, camera beats, lighting, audio, and final frame. Apply the latest user instruction to that brief before drafting. The latest user instruction replaces an older value in the same control layer unless the user explicitly says to add, combine, keep both, or preserve it.
+
+Classify the requested change as `ADD`, `REPLACE`, `DELETE`, `REORDER`, `RETIME`, `PRESERVE`, or `RESET` using [references/revision-workflow.md](references/revision-workflow.md). Retire superseded values and remove their dependent camera, focus, audio, prop, timing, continuity, and exclusion clauses. Rebuild every affected dependency; a subject-action change must trigger a camera/timing check, and a camera replacement must recompile that beat's start, move, path, speed, blocking, focus, and end as one compatible route.
+
+Recompile the same full director-brief structure from the canonical active brief on every revision, including the first revision. Return one complete replacement prompt and never append revision history, patch notes, retired values, or contradictory “not the old move” language to the copy-ready prompt. A localized edit may have a narrow edit boundary, but its returned prompt must still be the complete active edit brief.
+
 ## Repair workflow
 
-Classify the failure first: identity/product drift, subject motion, camera path/speed, framing, collision/continuity, lighting/style, audio/timing, or unwanted text/music. Repair the failed layer first; use localized editing when the interface exposes it and the remainder is usable. Strengthen or replace a reference when prose is insufficient, and rewrite the full brief only when several layers failed.
+Classify the failure first: identity/product drift, subject motion, camera path/speed, framing, collision/continuity, lighting/style, audio/timing, or unwanted text/music. Repair the failed layer first; use localized editing when the interface exposes it and the remainder is usable. Narrow repair determines the changed scope, not the output format: rebuild and return the full active brief even when only one layer changes. Strengthen or replace a reference when prose is insufficient.
 
-Replace unsupported coordinate formulas with a readable physical path, landmarks, start/end states, or a clean path reference. For a moving-camera repair, preserve the prior start state, target, route tangent, focus behavior, and end framing unless that layer failed.
+Replace unsupported coordinate formulas with a readable physical path, landmarks, start/end states, or a clean path reference. For a moving-camera repair, preserve only active start, target, route tangent, focus, and end values that the user did not replace, delete, reset, reorder, or retime. Never use preservation language to revive a retired value.
 
 ## Prompt length contract
 
@@ -78,9 +87,9 @@ Use fewer characters whenever the brief is already complete and never pad to rea
 
 Write the first draft in the user's requested language. Measure Seedance 2.5 with `scripts/count_prompt_chars.py` and Fast with `scripts/count_prompt_chars.py PROMPT_PATH --limit 4000` when tools are available. For Fast, if the draft is above the 3,500-character target but at or below 4,000, compress redundant wording in the requested language toward 3,500 while preserving the full structure.
 
-If a draft exceeds its active hard maximum, rewrite the entire prompt code block in concise Simplified Chinese. Preserve every exact reference tag, timeline, camera path, final frame, and functional constraint, then measure and compress until the active hard maximum is met: 5,000 for 2.5 or 4,000 for Fast. Retain the exact set of supplied timecode ranges; do not merge, renumber, or recalculate beats. If the user explicitly forbids translation, keep the requested language and compress it instead.
+If a draft exceeds its active hard maximum, rewrite the entire prompt code block in concise Simplified Chinese. Translate only the canonical active brief. Preserve every exact active reference tag, timeline, camera path, final frame, and functional constraint, then measure and compress until the active hard maximum is met: 5,000 for 2.5 or 4,000 for Fast. Retain the exact set of active supplied timecode ranges after applying the latest revision; when the user explicitly reorders or retimes beats, retire the old ranges and preserve the new ranges instead. If the user explicitly forbids translation, keep the requested language and compress it instead.
 
-Compress in this order: redundant style adjectives; repeated continuity locks; duplicated negative clauses; explanatory restatements; then low-priority decorative detail. Preserve asset roles and priorities, exact tags, required beats, separate subject and camera action, camera start/path/end, audio mode, final handoff, and every necessary UI-dependent qualification.
+Before compression, remove all retired or superseded instructions and their dependencies. Then compress in this order: redundant style adjectives; repeated continuity locks; duplicated negative clauses; explanatory restatements; then low-priority decorative detail. Preserve active asset roles and priorities, exact tags, required beats, separate subject and camera action, camera start/path/end, audio mode, final handoff, and every necessary UI-dependent qualification.
 
 Report `프롬프트 길이: {N}/{ACTIVE_LIMIT}자` immediately after the code block, using 5,000 for Seedance 2.5 and 4,000 for Fast. The settings note, length line, asset-role map, rationale, and retry guidance are outside the prompt budget.
 ## Output contract
@@ -110,6 +119,7 @@ Before returning, verify that the prompt contains:
 - A copy-ready prompt code block within the active hard limit: 5,000 characters for Seedance 2.5 or 4,000 for explicit Seedance 2.0 Fast.
 - For Fast, the same complete structural blocks as 2.5 and an approximately 3,500-character target without padding.
 - A concise Simplified Chinese rewrite, rechecked against the active limit, when the requested-language draft exceeded that profile's hard maximum.
-- The exact supplied timecode-range set preserved without merging, renumbering, or recalculation during an over-limit rewrite.
+- For a revision, one complete replacement prompt compiled from the canonical active brief, with every superseded value and dependency absent.
+- The exact active timecode-range set preserved during an over-limit rewrite; if the latest request explicitly retimed or reordered the scene, only the new range set remains.
 
 Remove unsupported absolutes, pseudo-controls, conflicting moves, accidental cuts, and unassigned reference inheritance. Confirm that any one-shot route is physically contiguous and that every permitted edit has an explicit boundary.

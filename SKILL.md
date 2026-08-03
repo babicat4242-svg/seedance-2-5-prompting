@@ -31,7 +31,8 @@ Use this skill for Seedance 2.5, the latest/current Seedance, or an unspecified 
 7. Write observable subject action and physical state separately from camera movement.
 8. Add lighting, atmosphere, audio, and output intent only when they affect the shot.
 9. Add a small set of positive continuity locks and exclusions only for high-risk failures.
-10. Validate, then return the copy-ready prompt in the requested language.
+10. Draft the copy-ready prompt in the requested language, measure its exact character count, and apply the language fallback below when required.
+11. Validate, then return the final bounded prompt.
 
 ## Camera compiler
 
@@ -65,15 +66,26 @@ Classify the failure first: identity/product drift, subject motion, camera path/
 
 Replace unsupported coordinate formulas with a readable physical path, landmarks, start/end states, or a clean path reference. For a moving-camera repair, preserve the prior start state, target, route tangent, focus behavior, and end framing unless that layer failed.
 
+## Prompt length contract
+
+Treat the copy-ready prompt code block as a bounded deliverable. Count Unicode characters in that block only, including spaces and logical line breaks. The hard maximum is 5,000 characters. For a complex 30-second or multimodal prompt, target 4,300–4,800 characters; use fewer whenever the brief is already complete and never pad to reach the target.
+
+Write the first draft in the user's requested language and measure it with `scripts/count_prompt_chars.py` when tools are available. If it is 5,000 characters or fewer, keep that language. If it exceeds 5,000, rewrite the entire prompt code block in concise Simplified Chinese, preserve every exact reference tag, timeline, camera path, final frame, and functional constraint, then measure and compress the Chinese version until it is 5,000 characters or fewer. Retain the exact set of supplied timecode ranges during this rewrite; do not merge, renumber, or recalculate beats. If the user explicitly forbids translation, keep the requested language and compress it instead.
+
+Compress in this order: redundant style adjectives; repeated continuity locks; duplicated negative clauses; explanatory restatements; then low-priority decorative detail. Preserve asset roles and priorities, exact tags, required beats, separate subject and camera action, camera start/path/end, audio mode, final handoff, and every necessary UI-dependent qualification.
+
+Report `프롬프트 길이: {N}/5,000자` immediately after the code block. The settings note, length line, asset-role map, rationale, and retry guidance are outside the prompt budget.
+
 ## Output contract
 
 Return in this order:
 
 1. A one-line assumption/settings note only when needed.
-2. One copy-ready prompt code block in the user's language.
-3. A compact asset-role map when references exist.
-4. A two-to-four-line camera rationale.
-5. One narrow retry instruction only when repairing an existing result.
+2. One copy-ready prompt code block in the user's language, or in Simplified Chinese when the fallback above applies.
+3. The exact prompt length line.
+4. A compact asset-role map when references exist.
+5. A two-to-four-line camera rationale.
+6. One narrow retry instruction only when repairing an existing result.
 
 Keep exact user tags and avoid unnecessary explanation. For review-only requests, use the optional one-line note to name the strongest failure when needed, then preserve the return order above and provide the corrected prompt as item 2.
 
@@ -88,5 +100,8 @@ Before returning, verify that the prompt contains:
 - A deliberate audio mode.
 - A final-frame or handoff description.
 - Qualified wording for every beta/UI-dependent feature.
+- A copy-ready prompt code block containing exactly 5,000 characters or fewer.
+- A concise Simplified Chinese rewrite, rechecked against the limit, when the requested-language draft exceeded 5,000 characters.
+- The exact supplied timecode-range set preserved without merging, renumbering, or recalculation during an over-limit rewrite.
 
 Remove unsupported absolutes, pseudo-controls, conflicting moves, accidental cuts, and unassigned reference inheritance. Confirm that any one-shot route is physically contiguous and that every permitted edit has an explicit boundary.

@@ -12,6 +12,7 @@ Copy these structures, replace every brace-delimited variable, and retain the ex
 - Localized edit pattern
 - Extension pattern
 - Complete worked example
+- Character budget and language fallback
 
 ## Shared prompt order
 
@@ -24,6 +25,12 @@ mode/output → reference-role map → non-negotiables → scene/spatial rules
 ```
 
 Keep subject action and camera action in separate sentences. Duration, timestamps, angles, focal lengths, and speeds are approximate intent unless the current interface exposes a matching control or path reference.
+
+## Character budget and language fallback
+
+Draft the prompt code block in the user's requested language, then count all Unicode characters in that block, including spaces and logical line breaks. Use `../scripts/count_prompt_chars.py` when tools are available. A complex prompt should normally land around 4,300–4,800 characters and must not exceed 5,000; do not pad a complete short prompt.
+
+If the first draft exceeds 5,000 characters, rewrite the entire code block in concise Simplified Chinese while preserving exact reference tags, timecodes, asset-role priority, camera geometry, final frame, and functional constraints. Preserve the exact set of supplied timecode ranges; do not merge, renumber, or recalculate beats. Count again and compress the Chinese version until it is at most 5,000 characters. When the user explicitly forbids translation, compress in the requested language instead. Keep the asset-role table, camera rationale, and length report outside the prompt code block.
 
 ## Short single-shot pattern
 

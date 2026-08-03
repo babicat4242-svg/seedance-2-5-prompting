@@ -13,6 +13,7 @@ Seedance 2.5 영상 프롬프트를 작성·검토·수정하는 Codex용 커뮤
 - 30개 카메라 모션 정의와 충돌 규칙
 - 시작 구도 → 물리 경로 → 방향축 → 속도/이징 → 렌즈/초점 → 종료 구도로 이어지는 카메라 컴파일러
 - 현재 UI와 계정에 따라 달라질 수 있는 기능은 `Beta/UI-dependent`로 명시
+- 공백·줄바꿈 포함 최대 5,000자 제한 및 초과 시 중국어 간체 폴백
 
 ## 설치
 
@@ -54,6 +55,8 @@ references/camera-motion.md
 references/model-differences.md
 references/prompt-patterns.md
 references/sources.md
+scripts/count_prompt_chars.py
+tests/test_count_prompt_chars.py
 ```
 
 - [`SKILL.md`](SKILL.md): 트리거, 작성 절차, 출력 계약
@@ -61,6 +64,8 @@ references/sources.md
 - [`model-differences.md`](references/model-differences.md): 2.0 → 2.5 마이그레이션 기준
 - [`prompt-patterns.md`](references/prompt-patterns.md): 실전 프롬프트 패턴
 - [`sources.md`](references/sources.md): 공식 출처와 근거 우선순위
+- [`count_prompt_chars.py`](scripts/count_prompt_chars.py): 공백과 논리 줄바꿈을 포함한 5,000자 하드 리밋 검사
+- [`test_count_prompt_chars.py`](tests/test_count_prompt_chars.py): 경계값 및 줄바꿈 정규화 회귀 테스트
 
 ## 검증
 

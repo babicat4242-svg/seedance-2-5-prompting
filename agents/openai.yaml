@@ -1,0 +1,4 @@
+interface:
+  display_name: "Seedance 2.5 Prompting"
+  short_description: "Seedance 2.5 카메라·R2V 프롬프트 설계"
+  default_prompt: "Use $seedance-2-5-prompting to write a production-ready Seedance 2.5 prompt with coherent camera motion."

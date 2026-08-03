@@ -7,9 +7,12 @@ from pathlib import Path
 SCRIPT_PATH = Path(__file__).parents[1] / "scripts" / "count_prompt_chars.py"
 
 
-def run_counter(prompt_path: Path) -> subprocess.CompletedProcess[str]:
+def run_counter(
+    prompt_path: Path,
+    *arguments: str,
+) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        [sys.executable, str(SCRIPT_PATH), str(prompt_path)],
+        [sys.executable, str(SCRIPT_PATH), str(prompt_path), *arguments],
         check=False,
         capture_output=True,
         text=True,
@@ -53,3 +56,29 @@ def test_cli_counts_logical_line_breaks_once(tmp_path: Path) -> None:
     # Then
     assert result.returncode == 0
     assert result.stdout.strip() == "6/5000"
+
+
+def test_cli_accepts_fast_prompt_at_custom_limit(tmp_path: Path) -> None:
+    # Given
+    prompt_path = tmp_path / "prompt.txt"
+    _ = prompt_path.write_text("가" * 4_000, encoding="utf-8")
+
+    # When
+    result = run_counter(prompt_path, "--limit", "4000")
+
+    # Then
+    assert result.returncode == 0
+    assert result.stdout.strip() == "4000/4000"
+
+
+def test_cli_rejects_fast_prompt_over_custom_limit(tmp_path: Path) -> None:
+    # Given
+    prompt_path = tmp_path / "prompt.txt"
+    _ = prompt_path.write_text("가" * 4_001, encoding="utf-8")
+
+    # When
+    result = run_counter(prompt_path, "--limit", "4000")
+
+    # Then
+    assert result.returncode == 1
+    assert result.stdout.strip() == "4001/4000"

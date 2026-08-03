@@ -1,6 +1,6 @@
 # Seedance 2.5 Source Notes
 
-Retrieved: 2026-08-02
+Retrieved: 2026-08-03
 
 ## Source priority
 
@@ -8,6 +8,7 @@ Retrieved: 2026-08-02
 2. Current official product pages establish published capability claims.
 3. Official prompt and camera guides establish vocabulary and planning guidance.
 4. Older official articles are supporting context only when they agree with the current product page; otherwise retain them as a provenance warning.
+5. Community repositories may supply vocabulary, examples, and cross-checks, but never override the visible UI or official capability sources.
 
 Use the capability labels in `model-differences.md`: published capability is not a promise that a control appears in a particular account, region, or mode.
 
@@ -33,6 +34,11 @@ Some official pages retain pre-launch language while the current main Dreamina m
 
 This rule deliberately separates a live product page from a claim that every visitor can currently select the model. It avoids converting stale launch copy or marketing copy into a universal availability statement.
 
+## Community prompt references
+
+- [Anil-matcha/awesome-seedance-2.5-api-prompts](https://github.com/Anil-matcha/awesome-seedance-2.5-api-prompts) — community collection used only to cross-check concise prompt ordering, timestamped shot-script notation, multimodal @Image/@Video/@Audio authoring conventions, and common camera vocabulary. Its README declares an MIT license, but GitHub did not expose a standalone license file during the 2026-08-03 review; paraphrase patterns and retain attribution instead of copying its prompt library. It is not an official ByteDance, Dreamina, CapCut, Volcano Ark, or provider-neutral specification. Do not promote third-party API limits, pricing, endpoint behavior, or model comparisons into official facts without separate primary-source verification.
+- [Pinned analysis snapshot](community-api-prompts-analysis.md) — review and integration decisions for commit [f020c085cdaf3174279e361829cee1c8b09a37e4](https://github.com/Anil-matcha/awesome-seedance-2.5-api-prompts/tree/f020c085cdaf3174279e361829cee1c8b09a37e4).
+
 ## Usage rule
 
-For each prompt claim, cite the highest-priority official source above, attach an evidence label, and then check the user-visible UI for mode-specific controls. Preserve the exact user/UI reference tag, qualify feature availability when a control is not visible, and phrase camera, beat, timing, audio, and end-frame details as direction unless the interface or an uploaded reference makes them enforceable.
+For each prompt claim, cite the highest-priority official source above, attach an evidence label, and then check the user-visible UI for mode-specific controls. Preserve the exact user/UI reference tag, qualify feature availability when a control is not visible, and phrase camera, beat, timing, audio, and end-frame details as direction unless the interface or an uploaded reference makes them enforceable. When a community source is useful, label it as community guidance and use it only for authoring heuristics or vocabulary cross-checks.

@@ -12,6 +12,7 @@
 - Conflict matrix
 - Reference-driven camera paths
 - Failure diagnosis
+- Community vocabulary cross-check
 - Quick phrase library
 
 Camera wording is a **prompting vocabulary and compiler heuristic**, not a promise of a dedicated camera control or frame-perfect reproduction. Follow the capability qualifications in [model-differences.md](model-differences.md): the visible interface and uploaded references determine what is selectable or enforceable.
@@ -382,6 +383,14 @@ If camera and actor references disagree, say which governs each dimension rather
 | Handheld becomes chaotic | Shake was requested without a dominant route or restraint. | Request restrained micro-drift and retain a dominant path. |
 | Door/wall collision | Geometry, clearance, or the shot handoff was unspecified. | Use white-model geometry or describe clearance and camera handoff. |
 | Late drift in 30s | Later beats have no resolved targets. | Allocate 6–8s beats and give every beat an end state; this is a heuristic, not a duration guarantee. |
+
+## Community vocabulary cross-check
+
+The community guide [awesome-seedance-2.5-api-prompts](https://github.com/Anil-matcha/awesome-seedance-2.5-api-prompts) independently uses common terms such as slow push in/dolly in, dolly out, tracking shot, crane up, steadicam follow, orbit, whip pan, locked off, top-down, handheld, gimbal, rack focus, and FPV continuous long take. Treat this only as a vocabulary cross-check, not proof of dedicated Seedance controls. See [community-api-prompts-analysis.md](community-api-prompts-analysis.md) for provenance and exclusions.
+
+Normalize those short keywords through this reference before drafting: decide whether the camera body translates, the aim rotates, the lens changes, or focus moves; then add start framing, physical route, direction, speed, subject relation, end framing, and settle/cut behavior. For example, expand a bare tracking shot left into either side tracking or truck-left plus a separately named pan target. Expand rack focus with near target, far target, transfer order, and final focus target. Expand orbit with target, camera-relative direction, arc intent, radius, and end angle.
+
+Do not copy a camera-word list into the prompt. Select one dominant move per beat, express the physical behavior, and reject conflicts using the matrix above.
 
 ## Quick phrase library
 

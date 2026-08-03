@@ -5,6 +5,8 @@ Copy these structures, replace every brace-delimited variable, and retain the ex
 ## Contents
 
 - Shared prompt order
+- Community-derived compacting checks
+- Seedance 2.0 Fast custom profile
 - Short single-shot pattern
 - 30-second sequence pattern
 - Image-to-video pattern
@@ -26,12 +28,30 @@ mode/output → reference-role map → non-negotiables → scene/spatial rules
 
 Keep subject action and camera action in separate sentences. Duration, timestamps, angles, focal lengths, and speeds are approximate intent unless the current interface exposes a matching control or path reference.
 
+## Community-derived compacting checks
+
+The community collection [awesome-seedance-2.5-api-prompts](https://github.com/Anil-matcha/awesome-seedance-2.5-api-prompts) provides a useful cross-check for concise ordering and timestamped shot scripts. Adapt its ideas without replacing this skill's full structure:
+
+- After mode and reference roles, front-load one compact core-scene sentence containing subject, observable action, environment, dominant camera intent, lighting/style, and the highest-risk constraint.
+- Within each timecode, keep the local order: shot size → subject action → primary camera move/path → focus or audio cue when relevant → readable end state.
+- Treat @Image1, @Video1, and @Audio1 as authoring-role labels whose exact spelling must match the user's interface; never claim that the prose tag itself is an API field.
+- Use short standard motion terms only as the first pass. Compile every important move through [camera-motion.md](camera-motion.md) so orbit, tracking, rack focus, whip pan, crane, locked-off, gimbal, or FPV gains physical start/path/end behavior.
+
+The community guide's short-prompt length suggestion does not override this skill's active character contract. Preserve the complete director-brief blocks and apply the 2.5 or Fast budget below. Read [community-api-prompts-analysis.md](community-api-prompts-analysis.md) for the full source audit and rejected claims.
+
+## Seedance 2.0 Fast custom profile
+
+Use this profile only when the user explicitly names Seedance 2.0 Fast. Treat the 15-second duration and its character budget as local authoring conventions rather than public or official specifications.
+
+Keep the same shared prompt order and full control structure as Seedance 2.5: mode/output, asset-role map, non-negotiables, scene/spatial rules, timestamped subject action, separately compiled camera plan, lighting/style, audio mode, end state, and continuity locks. Use three to five readable beats across 15 seconds; a useful default is 0–3s setup, 3–7s development, 7–11s payoff, and 11–15s resolution. Adjust the divisions when the action or synchronization requires it.
+
+Aim for about 3,500 characters and never exceed 4,000. Count with `../scripts/count_prompt_chars.py PROMPT_PATH --limit 4000`. Tighten repeated prose before removing detail, and never remove the asset-role hierarchy, subject/camera separation, camera start/path/end, audio mode, or final frame merely to reach the smaller budget.
+
 ## Character budget and language fallback
 
-Draft the prompt code block in the user's requested language, then count all Unicode characters in that block, including spaces and logical line breaks. Use `../scripts/count_prompt_chars.py` when tools are available. A complex prompt should normally land around 4,300–4,800 characters and must not exceed 5,000; do not pad a complete short prompt.
+Select the active budget before writing: Seedance 2.5 targets 4,300–4,800 characters with a 5,000-character hard maximum; explicit Seedance 2.0 Fast aims for about 3,500 with a 4,000-character hard maximum. Count all Unicode characters in the prompt code block, including spaces and logical line breaks. Use `../scripts/count_prompt_chars.py` for 2.5 and add `--limit 4000` for Fast. Never pad a complete short prompt.
 
-If the first draft exceeds 5,000 characters, rewrite the entire code block in concise Simplified Chinese while preserving exact reference tags, timecodes, asset-role priority, camera geometry, final frame, and functional constraints. Preserve the exact set of supplied timecode ranges; do not merge, renumber, or recalculate beats. Count again and compress the Chinese version until it is at most 5,000 characters. When the user explicitly forbids translation, compress in the requested language instead. Keep the asset-role table, camera rationale, and length report outside the prompt code block.
-
+For Fast drafts between 3,501 and 4,000 characters, compress redundant wording in the requested language toward 3,500 while keeping the complete 2.5 structure. If a draft exceeds its active hard maximum, rewrite the entire code block in concise Simplified Chinese while preserving exact reference tags, timecodes, asset-role priority, camera geometry, final frame, and functional constraints. Preserve the exact set of supplied timecode ranges; do not merge, renumber, or recalculate beats. Count again and compress until the active limit is met. When the user explicitly forbids translation, compress in the requested language instead. Keep the asset-role table, camera rationale, and length report outside the prompt code block.
 ## Short single-shot pattern
 
 Use for one self-contained action in `{DURATION}` (typically a short standard generation).

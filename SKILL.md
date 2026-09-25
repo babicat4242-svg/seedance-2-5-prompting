@@ -5,6 +5,8 @@ description: Use when writing, reviewing, or repairing prompts for Seedance 2.5,
 
 # Seedance 2.5 Prompting
 
+This repository maintains the v1 skill independently. Do not import or merge v2-specific directing rules when updating this version.
+
 ## Core principle
 
 Treat a Seedance 2.5 or explicit Seedance 2.0 Fast prompt as a compact director's brief with explicit reference roles, readable beat timing, separate subject and camera motion, and a defined final frame. Preserve exact user/UI reference tags. Describe controllable intent; do not promise literal reproduction, frame-perfect timing, or hidden controls.
@@ -35,6 +37,21 @@ Use this skill for Seedance 2.5, the latest/current Seedance, an unspecified See
 9. Add a small set of positive continuity locks and exclusions only for high-risk failures.
 10. Draft the copy-ready prompt in the requested language, measure its exact character count, and apply the language fallback below when required.
 11. Validate, then return the final bounded prompt.
+
+## Prompt section order
+
+The copy-ready prompt uses eight visible sections in this exact order, translated into the requested language: **참조 → 피사체 → 배경 → 타임라인 → 카메라 → 스타일 → 오디오 → 제약 조건** (Reference → Subject → Background → Timeline → Camera → Style → Audio → Constraints).
+
+1. Reference: supplied image/video tags, visual roles, preserved attributes, and priorities. With no visual reference, mark this section as text-only; never invent tags.
+2. Subject: the character or object, relevant appearance, initial state, and intent.
+3. Background: location, environment, spatial anchors, and geometry.
+4. Timeline: requested duration, timed subject actions and reactions, with the final physical state in the last beat.
+5. Camera: the existing camera compiler's start, move, path, speed, blocking, lens/focus, end framing, and edit behavior.
+6. Style: visual treatment, lighting, color, and atmosphere as relevant to the shot.
+7. Audio: audio reference tags and their roles/priorities, audio mode, dialogue, music, effects, silence, and sync points. Audio references are separate from visual references; keep their source mapping here. For a video supplying both picture and sound, describe its visual role in Reference and its sound role here.
+8. Constraints: mode/output, aspect intent, non-negotiables, continuity requirements, and relevant exclusions.
+
+Keep this order after revisions, compression, and language fallback. An optional settings note outside the code block does not become a leading section inside it. The final physical state belongs in Timeline and camera end framing in Camera, not in an extra block after Audio. This changes presentation order only; retain this version's existing duration, budget, camera, and revision rules.
 
 ## Camera compiler
 
@@ -107,7 +124,7 @@ Keep exact user tags and avoid unnecessary explanation. For review-only requests
 
 ## Final checklist
 
-Before returning, verify that the prompt contains:
+Before returning, verify the eight-section order above and that the prompt contains:
 
 - A declared mode, duration, and output intent.
 - Every referenced asset's role and priority.

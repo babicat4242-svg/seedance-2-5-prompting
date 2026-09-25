@@ -4,6 +4,10 @@ Seedance 2.5와 명시적 Seedance 2.0 Fast 영상 프롬프트를 작성·검�
 
 > Unofficial community skill; not affiliated with ByteDance or Dreamina.
 
+이 저장소는 v1 스킬로 별도 관리합니다. v2의 추가 연출 규칙과 통합하지 않습니다.
+
+프롬프트 출력 순서: **참조 → 피사체 → 배경 → 타임라인 → 카메라 → 스타일 → 오디오 → 제약 조건**. 참조에는 이미지·영상 자료를, 오디오에는 음원 참조·대사·효과음·BGM을 구분해서 배치합니다.
+
 ## 주요 기능
 
 - Seedance 2.5와 명시적 Seedance 2.0 Fast를 처리하고, 그 밖의 2.0 레거시는 기존 2.0 스킬로 라우팅
